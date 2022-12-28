@@ -65,6 +65,7 @@ import LoginPage from './Registration/RegistraionComponents/LoginPage';
 // import { NavigationContainer } from '@react-navigation/native';
 // import createNativeStackNavigator from  '@react-navigation/native-stack'
 import RegistrationForm from './Registration/RegistraionComponents/RegistrationForm';
+import Successful from './Registration/RegistraionComponents/Successful';
 
 // const stack =createNativeStackNavigator()
 const App = () => {
@@ -95,6 +96,7 @@ const App = () => {
         </NavigationContainer> */}
         {/* <LoginPage/> */}
         <RegistrationForm/>
+        {/* <Successful/> */}
       </View> 
       </SafeAreaView>
   );

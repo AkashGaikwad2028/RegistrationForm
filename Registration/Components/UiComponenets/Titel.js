@@ -14,7 +14,7 @@ const styles= StyleSheet.create({
  
     TitelText:{
         color:Colors.primary500,
-        fontSize:45,
+        fontSize:35,
         textAlign:"center",
         marginBottom:25,
         fontWeight:"bold",

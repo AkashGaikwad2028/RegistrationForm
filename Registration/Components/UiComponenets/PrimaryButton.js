@@ -7,6 +7,7 @@ export default function PrimaryButton({children,onSubmit}) {
     <View>
    <TouchableOpacity  android_ripple={{color:"white"}}
      style={styles.ButtonContainer}
+    //  onPress={onSubmit}
      onPress={onSubmit}
    >
     <Text style={styles.touch}>{children}</Text>
@@ -27,12 +28,12 @@ const styles=StyleSheet.create({
         elevation:20,
     },
     ButtonContainer:{
-        marginTop:30,
+        marginTop:5,
         // flexDirection:"row",
     //   justifyContent:'center',
         padding:5,
         // flex:1,
         backgroundColor:Colors.primary500,
-        borderRadius:5,
+        borderRadius:30,
     },
 })
