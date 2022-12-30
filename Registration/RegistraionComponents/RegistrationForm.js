@@ -4,7 +4,7 @@ import {TextInput, View, StyleSheet, Text, ScrollView} from 'react-native';
 import Titel from '../Components/UiComponenets/Titel';
 import PrimaryButton from '../Components/UiComponenets/PrimaryButton';
 
-export default function RegistrationForm() {
+export default function RegistrationForm({navigation}) {
   const initiateValues = {
     firstname: '',
     Lastname: '',
@@ -16,6 +16,7 @@ export default function RegistrationForm() {
 
   const [formValues, setFormValues] = useState(initiateValues);
   const [formErrors, setformErrors] = useState('');
+  const [submit,Issubmit]=useState(false)
 
   ChangefirstName = input => {
     setFormValues(preValue => {
@@ -69,7 +70,11 @@ export default function RegistrationForm() {
 
   const HandelSubmit = () => {
     setformErrors(Validate(formValues));
+if(submit){
+  navigation.navigate('LoginPage');
   };
+  }
+
 
   const Validate = value => {
     console.log('click');
@@ -78,26 +83,51 @@ export default function RegistrationForm() {
     console.log(value.firstname, 'validate');
     if (value.firstname.length < 3) {
       errors.firstname = 'Too-Short';
+      Issubmit(false)
+    }
+    else{
+      Issubmit(true)
     }
     if (value.Lastname.length < 7) {
       errors.Lastname = 'Too-Short';
+      Issubmit(false)
+    }
+    else{
+      Issubmit(true)
     }
     if (!regex.test(value.Email)) {
       errors.Email = 'please Enter Valid Email !';
+      Issubmit(false)
+    }
+    else{
+      Issubmit(true)
     }
     if (value.PhoneNumbner.length < 7) {
       errors.PhoneNumbner = 'Please Enter Valid Number';
+      Issubmit(false)
+    }
+    else{
+      Issubmit(true)
     }
     if (value.password.length < 7) {
       errors.password = 'Password is Too Short';
+      Issubmit(false)
+    }
+    else{
+      Issubmit(true)
     }
     if (value.password !== value.Confirmpassword) {
       errors.Confirmpassword = 'Enter Password is Not Match';
+      Issubmit(false)
+    }
+    else{
+      Issubmit(true)
     }
     return errors;
   };
+  console.log("submit",submit,"108")
   // console.log(formErrors, 'Formerror');
- 
+ console.log("formValues.Confirmpassword",formValues.Confirmpassword,"formValues.password",formValues.password,formValues.password==formValues.Confirmpassword)
 
   return (
     <ScrollView>

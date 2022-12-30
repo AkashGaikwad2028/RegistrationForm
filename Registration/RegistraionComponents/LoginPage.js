@@ -24,6 +24,7 @@ export default function LoginPage({navigation}) {
   };
 
   const HandelLink = () => {
+
     navigation.navigate('Register');
   };
 
@@ -38,6 +39,11 @@ export default function LoginPage({navigation}) {
           placeholder="+91"
           style={styles.input}
           keyboardType="number-pad"
+          onChangeText={HandelChange}
+          value={change}></TextInput>
+          <TextInput
+          placeholder="password"
+          style={styles.input}
           onChangeText={HandelChange}
           value={change}></TextInput>
       </View>
@@ -95,6 +101,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 25,
     elevation: 20,
     padding: 15,
+    marginBottom:25
   },
   SubContainer: {
     marginTop: 20,
