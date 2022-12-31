@@ -3,6 +3,7 @@ import Colors from '../Components/Ui/Color';
 import {TextInput, View, StyleSheet, Text, ScrollView} from 'react-native';
 import Titel from '../Components/UiComponenets/Titel';
 import PrimaryButton from '../Components/UiComponenets/PrimaryButton';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function RegistrationForm({navigation}) {
   const initiateValues = {
@@ -70,9 +71,9 @@ export default function RegistrationForm({navigation}) {
 
   const HandelSubmit = () => {
     setformErrors(Validate(formValues));
-if(submit){
-  navigation.navigate('LoginPage');
-  };
+   if (storeData(formValues)){
+    navigation.navigate('LoginPage');
+   }
   }
 
 
@@ -103,7 +104,7 @@ if(submit){
       Issubmit(true)
     }
     if (value.PhoneNumbner.length < 7) {
-      errors.PhoneNumbner = 'Please Enter Valid Number';
+      errors.PhoneNumbner = 'Please Enter valid Number';
       Issubmit(false)
     }
     else{
@@ -117,7 +118,7 @@ if(submit){
       Issubmit(true)
     }
     if (value.password !== value.Confirmpassword) {
-      errors.Confirmpassword = 'Enter Password is Not Match';
+      errors.Confirmpassword = 'Enter Password is Not Match ';
       Issubmit(false)
     }
     else{
@@ -127,7 +128,24 @@ if(submit){
   };
   console.log("submit",submit,"108")
   // console.log(formErrors, 'Formerror');
- console.log("formValues.Confirmpassword",formValues.Confirmpassword,"formValues.password",formValues.password,formValues.password==formValues.Confirmpassword)
+//  console.log("formValues.Confirmpassword",formValues.Confirmpassword,"formValues.password",formValues.password,formValues.password==formValues.Confirmpassword)
+
+ const storeData = async (input) => {
+  console.log("input",input)
+  try {
+    const jsonValue = JSON.stringify(input)
+    console.log("jsonValue",jsonValue)
+    await AsyncStorage.setItem('@storage_Key', jsonValue)
+  } catch (e) {
+    console.log("error")
+  }
+}
+// console.log( console.log("input-143",formValues))
+console.log( "storeData", storeData(formValues))
+
+// console.log( console.log("input-143",formValues))
+
+
 
   return (
     <ScrollView>

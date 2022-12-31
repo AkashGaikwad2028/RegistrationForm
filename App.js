@@ -7,6 +7,7 @@ import {
 } from 'react-native';
 import LoginPage from './Registration/RegistraionComponents/LoginPage';
 import RegistrationForm from './Registration/RegistraionComponents/RegistrationForm';
+import Successful from "./Registration/RegistraionComponents/Successful"
 
 const Stack = createNativeStackNavigator();
 const App = () => {
@@ -31,6 +32,20 @@ const App = () => {
         <Stack.Screen
           name="Register"
           component={RegistrationForm}
+          options={{
+            title: 'Back',
+            headerStyle: {
+              backgroundColor: Colors.primary500,
+            },
+            headerTintColor: 'white',
+            headerTitleStyle: {
+              fontWeight: 'bold',
+            },
+          }}
+        />
+         <Stack.Screen
+          name="Successful"
+          component={Successful}
           options={{
             title: 'Back',
             headerStyle: {

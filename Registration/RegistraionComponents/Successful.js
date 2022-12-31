@@ -9,7 +9,7 @@ export default function Successful() {
   return (
 <>
   <View>
-    <Text style={{color:"white"}}>You Have Successfully Login</Text>
+    <Text style={{color:"black"}}>You Have Successfully Login</Text>
   </View>
 </>
   )
