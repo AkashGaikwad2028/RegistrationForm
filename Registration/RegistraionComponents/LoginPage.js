@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Image, StyleSheet, TextInput, Text, Alert} from 'react-native';
+import {View, Image, StyleSheet, TextInput, Text, Alert,KeyboardAvoidingView} from 'react-native';
 import Titel from '../Components/UiComponenets/Titel';
 import Colors from '../Components/Ui/Color';
 import PrimaryButton from '../Components/UiComponenets/PrimaryButton';
@@ -93,7 +93,8 @@ console.log("formerror",formError)
 
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView style={styles.container}>
+    <View>
       <Titel>Get-Started</Titel>
       <View style={styles.ImageContainer}>
         <Image source={require('../../Image/Login.jpg')} style={styles.img} />
@@ -124,16 +125,17 @@ console.log("formerror",formError)
         </LinkTag>
       </View>
     </View>
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     // margin:15,
+    flex:1,
     padding: 15,
     // marginTop:50,
     backgroundColor: 'black',
-    flex: 1,
     flexDirection: 'column',
     justifyContent: 'space-evenly',
   },
