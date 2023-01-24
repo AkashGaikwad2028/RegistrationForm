@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {View, Image, StyleSheet, TextInput, Text, Alert,KeyboardAvoidingView} from 'react-native';
 import Titel from '../Components/UiComponenets/Titel';
 import Colors from '../Components/Ui/Color';
 import PrimaryButton from '../Components/UiComponenets/PrimaryButton';
 import LinkTag from '../Components/UiComponenets/LinkTag';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+// import AsyncStorage from '@react-native-async-storage/async-storage';
+// import { SQLite } from 'react-native-sqlite-storage';
+import { openDatabase } from 'react-native-sqlite-storage';
+var db = openDatabase({ name: 'UserDatabase.db' });
 
 export default function LoginPage({navigation}) {
   const initiateValues = {
@@ -13,6 +16,7 @@ export default function LoginPage({navigation}) {
   };
   const [change, setChange] = React.useState(initiateValues);
   const [formError,setformError]=React.useState('')
+  const [userData,setUserData]=useState(null)
 
   ChangePhoneNumber = input => {
     setChange(preValue => {
@@ -32,6 +36,7 @@ export default function LoginPage({navigation}) {
     });
   };
 
+  console.log("change=>>>",change.phoneNumbner)
 
   const Validate=(value)=>{
 // console.log(value)
@@ -45,53 +50,149 @@ if (value.password.length<1){
 }
 return errors
   }
-
+console.log()
   const HandelLogin = () => {
     setformError(Validate(change))
-     getData().then((res)=>{
-      console.log("resssssssss",res)
-      let userData = res
-        console.log("userData------------",userData.PhoneNumbner)
-        if((userData.PhoneNumbner===change.phoneNumbner && userData.password===change.password)){
-          navigation.navigate('Successful');
-        }
-        else{
-          Alert.alert(
-            "Alert",
-            "Yov Have Enter Invalid Inputs",
-            [
-              { text: "OKay", onPress: () => "" }
-            ]
-          )
-        }
-      })
+    getUser()
+ if((change.phoneNumbner!=userData.PhoneNumbner) || (change.password!=userData.password)){
+    alert ("user not valid")
+  }
+  else{
+    navigation.navigate("Successful")
+  }
+    //  getData().then((res)=>{
+    //   console.log("resssssssss",res)
+    //   let userData = res
+    //     console.log("userData------------",userData.PhoneNumbner)
+    //     if((userData.PhoneNumbner===change.phoneNumbner && userData.password===change.password)){
+    //       navigation.navigate('Successful');
+    //     }
+    //     else{
+    //       Alert.alert(
+    //         "Alert",
+    //         "Yov Have Enter Invalid Inputs",
+    //         [
+    //           { text: "OKay", onPress: () => "" }
+    //         ]
+    //       )
+    //     }
+    //   })
     
   }
    
+ 
+
+  // console.log("refoormmmmm",userData.phoneNumbner)
   
   // console.log(change,"kdjjjjjjjjjjjjjjjjjjjjjjjj")
-console.log("formerror",formError)
+console.log("formerror",(change.phoneNumbner!=userData.phoneNumbner) || (change.password!=userData.password))
   
 
   const HandelLink = () => {
     navigation.navigate('Register');
   };
 
-  const getData = async () => {
-    try {
-      const jsonValue = await AsyncStorage.getItem('@storage_Key')
-      console.log("jsonValue--33",jsonValue)  
-      return jsonValue != null ? JSON.parse(jsonValue) : null;
-    } catch(e) {
-      // error reading value
-    }
-    // console.log("number",jsonValue.phneNumber)
-  }
-// console.log("getdata",getData())  
+//   const getData = async () => {
+//     try {
+//       // const jsonValue = await AsyncStorage.getItem('@storage_Key')
+//       // console.log("jsonValue--33",jsonValue)  
+//       // return jsonValue != null ? JSON.parse(jsonValue) : null;
+//     db.transaction((tx)=>{
+//       tx.executeSql(
+//         "SELECT Phonenumber, password FROM User",
+//         [],
+//         (tx,results)=>{
+//           var len = results.rows.length;
+//           if(len>0){
+//             navigation.navigate('Successful');  
+//           }
+//         }
+//       )
+//     })
+//     } catch(e) {
+//       // error reading value
+//     }
+//     // console.log("number",jsonValue.phneNumber)
+//   }
+// // console.log("getdata",getData())  
   
+// const getData = () => {
+//   try {
+//       // AsyncStorage.getItem('UserData')
+//       //     .then(value => {
+//       //         if (value != null) {
+//       //             let user = JSON.parse(value);
+//       //             setName(user.Name);
+//       //             setAge(user.Age);
+//       //         }
+//       //     })
+//       db.transaction((tx) => {
+//           tx.executeSql(
+//               "SELECT Name, Age FROM Users",
+//               [],
+//               (tx, results) => {
+//                   var len = results.rows.length;
+//                   if (len > 0) {
+//                       var userName = results.rows.item(0).Name;
+//                       var userAge = results.rows.item(0).Age;
+//                       setChange(userName);
+//                       setChange(userAge);
+//                   }
+//               }
+//           )
+//       })
+//   } catch (error) {
+//       console.log(error);
+//   }
+// }
+
+// useEffect(()=>{
+//   getUser()
+// },[])
+
+// useEffect(() => {
+//   db.transaction(function (txn) {
+//     txn.executeSql(
+//       "SELECT name FROM sqlite_master WHERE type='table' AND name='table_user'",
+//       [],
+//       function (tx, res) {
+//         console.log('item:', res.rows.length);
+//         if (res.rows.length == 0) {
+//           txn.executeSql('DROP TABLE IF EXISTS table_user', []);
+//           txn.executeSql(
+//             'CREATE TABLE IF NOT EXISTS table_user(user_id INTEGER PRIMARY KEY AUTOINCREMENT,  PhoneNumbner INT(10), password VARCHAR(20))',
+//             []
+//           );
+//         }
+//       }
+//     );
+//   });
+// }, []);
+
+let getUser = (input) => {
+ console.log("changeeeeeeeeeee=>>>>>>>",input)
+  try {
+   db.transaction( tx => {
+   tx.executeSql('SELECT * FROM table_user',[], (tx, results) => {
+        var len = results.rows.length;
+        console.log('len', len);
+        if (len> 0) {
+         setUserData(results.rows.item(0));
+          console.log('setUserData :',results.rows.item(0));
+        }
+        else {
+          alert('No user found');
+        }
+      });
+    });
+  } catch (e) {
+    console.log(e);
+  }
+};
 
 
 
+console.log("userData",userData)
   return (
     <KeyboardAvoidingView style={styles.container}>
     <View>

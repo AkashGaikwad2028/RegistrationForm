@@ -3,7 +3,21 @@ import Colors from '../Components/Ui/Color';
 import {TextInput, View, StyleSheet, Text, ScrollView,Alert} from 'react-native';
 import Titel from '../Components/UiComponenets/Titel';
 import PrimaryButton from '../Components/UiComponenets/PrimaryButton';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+// import AsyncStorage from '@react-native-async-storage/async-storage';
+// import { SQLite } from 'react-native-sqlite-storage';
+import { openDatabase } from 'react-native-sqlite-storage';
+var db = openDatabase({ name: 'UserDatabase.db' });
+
+// import SQLite from 'react-native-sqlite-storage';
+
+// const db = SQLite.openDatabase(
+//     {
+//         name: 'MainDB',
+//         location: 'default',
+//     },
+//     () => { },
+//     error => { console.log(error) }
+// );
 
 export default function RegistrationForm({navigation}) {
   const initiateValues = {
@@ -21,17 +35,16 @@ export default function RegistrationForm({navigation}) {
   const [hasFocus, setFocus] = useState(false);
   const [Iseditable,setisEditabled]=useState(true)
 
-  ChangefirstName = input => {
-    setisEditabled(!Iseditable)
+const  ChangefirstName = input => {
     setFormValues(preValue => {
       return {
         ...preValue,
         firstname: input,
       };
     });
+   
   };
-   ChangeLasttName = input => {
-  
+  const  ChangeLasttName = input => {
     setFormValues(preValue => {
       return {
         ...preValue,
@@ -39,7 +52,7 @@ export default function RegistrationForm({navigation}) {
       };
     });
   };
-  ChangeEmail = input => {
+ const ChangeEmail = input => {
     setFormValues(preValue => {
       return {
         ...preValue,
@@ -47,7 +60,7 @@ export default function RegistrationForm({navigation}) {
       };
     });
   };
-  ChangePhonenumber = input => {
+  const ChangePhonenumber = input => {
     setFormValues(preValue => {
       return {
         ...preValue,
@@ -55,7 +68,7 @@ export default function RegistrationForm({navigation}) {
       };
     });
   };
-  ChangePassword = input => {
+  const ChangePassword = input => {
     setFormValues(preValue => {
       return {
         ...preValue,
@@ -64,7 +77,7 @@ export default function RegistrationForm({navigation}) {
     });
    };
 
-   ChangeCurrentPassword = input => {
+   const ChangeCurrentPassword = input => {
      setFormValues(preValue => {
       return {
          ...preValue,
@@ -74,14 +87,15 @@ export default function RegistrationForm({navigation}) {
   };
 
   const HandelSubmit = () => {
+    setformErrors(Validate(formValues))
     console.log("formerrorssssssss=>>>>>>>>>.",formErrors)
      if (formErrors.firstname || formErrors.Lastname || formErrors.password || formErrors.Email || formErrors.PhoneNumbner){
       navigation.navigate('Register');
      }
    else {
-    storeData(formValues)
     navigation.navigate('LoginPage');
    }
+setData()
   }
 
   useEffect(()=>{
@@ -98,25 +112,23 @@ export default function RegistrationForm({navigation}) {
     const passwordRegex = /^(?=.*\d)(?=.*[a-zA-Z])[a-zA-Z0-9]{4,6}$/;
     console.log(value.firstname, 'validate');
 
-    if (value.firstname.length<1) {
-      errors.firstname = ' First Name Cant Be Empty'
-   
+    if(value.firstname.length<1){ 
+      errors.firstname = ' first Name Cant Be Empty';
     }
-      else if(!firstNameRegex.test(value.firstname)){ 
+ else if(!firstNameRegex.test(value.firstname)){ 
+      errors.firstname = 'Special Characters Not Allowed';
+    }
+ 
+   if(value.Lastname.length<1){ 
+      errors.Lastname = ' Lastt Name Cant Be Empty';
+    }
+
+    else if(!firstNameRegex.test(value.Lastname)){ 
       errors.firstname = 'Special Characters Not Allowed';
     
     }
- 
-    if (value.Lastname.length<1) {
-      errors.Lastname=' Last Name Cant Be Empty';
-     
-    }
-    else  if(!firstNameRegex.test(value.Lastname)){ 
-      errors.Lastname = 'Special Characters Not Allowed';
-    
-    }
    
-     if (value.Email.length<1) {
+  if (value.Email.length<1) {
         errors.Email = 'please Enter Valid Email !';
        
       }
@@ -124,19 +136,23 @@ export default function RegistrationForm({navigation}) {
         errors.Email = 'Special Characters Not Allowed';
       }
      
-     if(!phoneNumberRegex.test(value.PhoneNumbner)){
+        if((value.PhoneNumbner.length<0)){
+          errors.PhoneNumbner = 'Enter Number Is not acceptible';
+         
+        }
+       else if(!phoneNumberRegex.test(value.PhoneNumbner)){
           errors.PhoneNumbner = 'Enter Number Is not acceptible';
          
         }
       // console.log(value.password.length)
-      if (value.password.length < 1) {
+     if (value.password.length < 1) {
         errors.password = 'Please Enter Valid Password'; 
       }
         else if (passwordRegex.test(value.password)) {
             errors.password = 'Password Must Be Valid';
        }
         
-          if (value.Confirmpassword.length < 1) {
+        if (value.Confirmpassword.length < 1) {
             errors.Confirmpassword = 'Please Enter Valid confirmPassword';
            
           }
@@ -147,34 +163,103 @@ export default function RegistrationForm({navigation}) {
     return errors;
   };
   console.log("submit",submit,"108")
-  // console.log(formErrors, 'Formerror');
-//  console.log("formValues.Confirmpassword",formValues.Confirmpassword,"formValues.password",formValues.password,formValues.password==formValues.Confirmpassword)
 
- const storeData = async (input) => {
-  console.log("input",input)
-  try {
-    const jsonValue = JSON.stringify(input)
-    console.log("jsonValue",jsonValue)
-    await AsyncStorage.setItem('@storage_Key', jsonValue)
-  } catch (e) {
-    console.log("error")
-  }
+console.log("editabel->>>>>>>>>",Iseditable)
+
+// useEffect(()=>{
+//   createTable()
+// },[])
+
+useEffect(() => {
+  db.transaction(function (txn) {
+    txn.executeSql(
+      "SELECT name FROM sqlite_master WHERE type='table' AND name='table_user'",
+      [],
+      function (tx, res) {
+        console.log('item:', res.rows.length);
+        if (res.rows.length == 0) {
+          txn.executeSql('DROP TABLE IF EXISTS table_user', []);
+          txn.executeSql(
+            'CREATE TABLE IF NOT EXISTS table_user(user_id INTEGER PRIMARY KEY AUTOINCREMENT,  PhoneNumbner INT(10), password VARCHAR(20))',
+            []
+          );
+        } 
+      }
+    );
+  });
+}, []);
+
+//  const storeData = async (input) => {
+  // // console.log("input",input)
+  // try {
+  //   const jsonValue = JSON.stringify(input)
+  //   console.log("jsonValue",jsonValue)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+  //   await AsyncStorage.setItem('@storage_Key', jsonValue)
+  // }  
+  // } catch (e) {
+  //   console.log("error")
+//   // }
+// }
+
+// const getData=()=>{
+//   try {
+    // AsyncStorage.getItem('UserData')
+    //     .then(value => {
+    //         if (value != null) {
+    //             let user = JSON.parse(value);
+    //             setName(user.Name);
+    //             setAge(user.Age);
+    //         }
+    //     })
+//     db.transaction((tx) => {
+//         tx.executeSql(
+//             "SELECT PhoneNumbner, password FROM Users",
+//             [],
+//             (tx, results) => {
+//                 var len = results.rows.length;
+//                 if (len > 0) {
+//                     var userName = results.rows.item(0).PhoneNumbner;
+//                     var userAge = results.rows.item(0). password;
+//                     setName(userName);
+//                     setAge(userAge);
+//                 }
+//             }
+//         )
+//     })
+// } catch (error) {
+//     console.log(error);
+// }
+// }
+
+const setData=()=>{
+console.log("userMail=>>>>>>.",formValues)
+db.transaction(function (tx) {
+  tx.executeSql(
+    'INSERT INTO table_user (PhoneNumbner,password) VALUES (?,?)',
+    [formValues.PhoneNumbner,formValues.password],
+    (tx, results) => {
+      console.log('Results', results.rowsAffected);
+      if (results.rowsAffected > 0) {
+        console.log(results);
+        Alert.alert(
+          'Success',
+          'You are Resgistered Successfully',
+          [
+            {
+              text: 'OK',
+              onPress: () => navigation.navigate('LoginPage'),
+            },
+          ],
+          {cancelable: false},
+        );
+      } else alert('Registration Failed');
+    },
+  )})
+  console.log("userMail=>>>>>>249.",formValues.PhoneNumbner,formValues.password)
 }
-// console.log( console.log("input-143",formValues))
-console.log( "storeData", storeData(formValues))
-
-// console.log( console.log("input-143",formValues))
-
-console.log("focusssssssssss=>>>>>>",hasFocus)
-
-console.log("is editabel=>>>>>>>",Iseditable)
-console.log("formErrors",formErrors)
 
 
-console.log((formErrors.firstname)?Iseditable:!Iseditable,"firstname")
-console.log((formErrors.Lastname)?Iseditable:!Iseditable,"lastname")
-console.log((formErrors.Email)?Iseditable:!Iseditable,"firstname")
-
+console.log("setData++=>>>>>>",formValues)
   return (
     <ScrollView>
       <View style={styles.container}>
@@ -185,7 +270,8 @@ console.log((formErrors.Email)?Iseditable:!Iseditable,"firstname")
             style={[styles.text]}
             onChangeText={enteredText => ChangefirstName(enteredText)}
             name="firstname"
-            value={formValues.firstname}></TextInput>
+            value={formValues.firstname}
+            ></TextInput>
           {/* <Text style={styles.placeTag}>FirstName</Text> */}
           <Text style={styles.errors}>{formErrors.firstname}</Text>
         </View>
@@ -196,7 +282,7 @@ console.log((formErrors.Email)?Iseditable:!Iseditable,"firstname")
             onChangeText={enteredText => ChangeLasttName(enteredText)}
             name="Lastname"
             value={formValues.Lastname}
-            editable= {(formErrors.firstname)?Iseditable:!Iseditable}
+          
             ></TextInput>
           <Text style={styles.errors}>{formErrors.Lastname}</Text>
         </View>
@@ -208,7 +294,7 @@ console.log((formErrors.Email)?Iseditable:!Iseditable,"firstname")
             onChangeText={enteredText => ChangeEmail(enteredText)}
             name="Email"
             value={formValues.Email}
-            editable= {(formErrors.Lastname)?Iseditable:!Iseditable}
+            // editable={formErrors.Lastname ? Iseditable:!Iseditable}
             ></TextInput>
           <Text style={styles.errors}>{formErrors.Email}</Text>
         </View>
@@ -220,7 +306,7 @@ console.log((formErrors.Email)?Iseditable:!Iseditable,"firstname")
             onChangeText={enteredText => ChangePhonenumber(enteredText)}
             name="PhoneNumbner"
             value={formValues.PhoneNumbner}
-            editable= {(formErrors.Email)?Iseditable:!Iseditable}
+            // editable={formErrors.Email ? Iseditable:!Iseditable}
             ></TextInput>
           <Text style={styles.errors}>{formErrors.PhoneNumbner}</Text>
         </View>
@@ -233,7 +319,7 @@ console.log((formErrors.Email)?Iseditable:!Iseditable,"firstname")
             value={formValues.password}
             type="password"
             secureTextEntry={true}
-            editable= {(formErrors.PhoneNumbner)?Iseditable:!Iseditable}
+            // editable={formErrors.PhoneNumbner ? Iseditable:!Iseditable}
             ></TextInput>
           <Text style={styles.errors}>{formErrors.password}</Text>
         </View>
@@ -245,7 +331,7 @@ console.log((formErrors.Email)?Iseditable:!Iseditable,"firstname")
             name="Confirm-Password"
             value={formValues.Confirmpassword}
             secureTextEntry={true}
-            editable= {(formErrors.password)?Iseditable:!Iseditable}
+            // editable={formErrors.password ? Iseditable:!Iseditable}
             ></TextInput>
           <Text style={styles.errors}>{formErrors.Confirmpassword}</Text>
         </View> 
