@@ -36,7 +36,7 @@ export default function LoginPage({navigation}) {
     });
   };
 
-  console.log("change=>>>",change.phoneNumbner)
+  // console.log("change=>>>",change.phoneNumbner)
 
   const Validate=(value)=>{
 // console.log(value)
@@ -54,12 +54,8 @@ console.log()
   const HandelLogin = () => {
     setformError(Validate(change))
     getUser()
- if((change.phoneNumbner!=userData.PhoneNumbner) || (change.password!=userData.password)){
-    alert ("user not valid")
-  }
-  else{
     navigation.navigate("Successful")
-  }
+  
     //  getData().then((res)=>{
     //   console.log("resssssssss",res)
     //   let userData = res
@@ -85,7 +81,7 @@ console.log()
   // console.log("refoormmmmm",userData.phoneNumbner)
   
   // console.log(change,"kdjjjjjjjjjjjjjjjjjjjjjjjj")
-console.log("formerror",(change.phoneNumbner!=userData.phoneNumbner) || (change.password!=userData.password))
+// console.log("formerror",(change.phoneNumbner!=userData.phoneNumbner) || (change.password!=userData.password))
   
 
   const HandelLink = () => {

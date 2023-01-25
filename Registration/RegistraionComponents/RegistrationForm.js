@@ -358,8 +358,7 @@ const styles = StyleSheet.create({
     borderColor:Colors.primary500,
     padding: 15,
     fontSize: 20,
-    width: '100%',
-    
+    width: '100%', 
   },
 
   view: {
@@ -368,14 +367,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 5,
   },
-  // placeTag:{
-  //   color:Colors.primary500,
-  //   position:"relative",
-  //   bottom:"87%",
-  //   left:"-35%",
-  //   fontWeight:'bold',
-  //   fontSize:12
-  // },
   errors: {
     color: 'white',
     width: '100%',
@@ -384,40 +375,3 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
 });
-
-
-// if (value.Lastname.length < 7) {
-//   errors.Lastname = 'Too-Short';
-//   Issubmit(false)
-// }
-// else{
-//   Issubmit(true)
-// }
-// if (!regex.test(value.Email)) {
-//   errors.Email = 'please Enter Valid Email !';
-//   Issubmit(false)
-// }
-// else{
-//   Issubmit(true) 
-// }
-// if (value.PhoneNumbner.length < 7) {
-//   errors.PhoneNumbner = 'Please Enter valid Number';
-//   Issubmit(false)
-// }
-// else{
-//   Issubmit(true)
-// }
-// if (value.password.length < 7) {
-//   errors.password = 'Password is Too Short';
-//   Issubmit(false)
-// }
-// else{
-//   Issubmit(true)
-// }
-// if (value.password !== value.Confirmpassword) {
-//   errors.Confirmpassword = 'Enter Password is Not Match ';
-//   Issubmit(false)
-// }
-// else{
-//   Issubmit(true)
-// }

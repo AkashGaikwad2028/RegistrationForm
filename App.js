@@ -2,14 +2,17 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import * as React from 'react';
 import Colors from './Registration/Components/Ui/Color';
-import {
-  StyleSheet
-} from 'react-native';
+import thunk from 'redux-thunk';
+import { Provider } from 'react-redux';
 import LoginPage from './Registration/RegistraionComponents/LoginPage';
 import RegistrationForm from './Registration/RegistraionComponents/RegistrationForm';
 import Successful from "./Registration/RegistraionComponents/Successful"
+import { applyMiddleware,createStore } from 'redux';
+import Rootreducers from './Registration/Redux/Reducers/rootreducer';
+
 
 const Stack = createNativeStackNavigator();
+const store = createStore(Rootreducers, applyMiddleware(thunk))
 const App = () => {
   return (
     // enclose all components in this View tag
@@ -59,18 +62,7 @@ const App = () => {
         />
       </Stack.Navigator>
     </NavigationContainer>
-    // <SafeAreaView  style={styles.background}>
-    // <View style={styles.container}>
-    //   <LoginPage/>
-    // </View>
-    // </SafeAreaView>
   );
 };
 
 export default App;
-
-const styles = StyleSheet.create({
-  back: {
-    backgroundColor: 'black',
-  },
-});
