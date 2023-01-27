@@ -1,15 +1,20 @@
 import {
     FETCHUSERNFO_FAILURE,
     FETCHUSERNFO_PROGRESS,
-    FETCHUSERNFO_SUCCESS
+    FETCHUSERNFO_SUCCESS,
+    FETCHUSERPICS_FAILURE,
+    FETCHUSERPICS_SUCCESS,
+    FETCHUSERPICS_PROGRESS
 } from "../ActionConstants"
 
 const initalState = {
     isLoading: false,
-   userInfopage:{}
+   userInfopage:{},
+   userPics:{}
   };
 
   const UserInfopagereducer=(state=initalState,action)=>{
+    console.log("picpayload",action)
    switch(action.type){
    case  FETCHUSERNFO_PROGRESS:
     return{
@@ -33,4 +38,34 @@ const initalState = {
    }
   }
 
+//   const initalState1 = {
+//     isLoading: false,
+//    userPics:{}
+//   };
+
   export default UserInfopagereducer
+
+ export  const UserInfoPicsReducer=(state=initalState,action)=>{
+    switch(action.type){
+        case  FETCHUSERPICS_PROGRESS:
+            return{
+                ...state,
+                isLoading:true
+            }
+            case FETCHUSERPICS_SUCCESS:
+                return{
+                    ...state,
+                    isLoading:false,
+                    userPics:action.payload
+                }
+                case  FETCHUSERPICS_FAILURE:
+                return{
+                    ...state,
+                    isLoading:false,
+                    userPics:action.payload
+                }
+                default:
+                    return state ;
+    }
+  }
+

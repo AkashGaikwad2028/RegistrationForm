@@ -17,6 +17,7 @@ const App = () => {
   return (
     // enclose all components in this View tag
     <NavigationContainer>
+      <Provider store={store}>
       <Stack.Navigator>
         <Stack.Screen
           name="LoginPage"
@@ -61,6 +62,7 @@ const App = () => {
           }}
         />
       </Stack.Navigator>
+      </Provider>
     </NavigationContainer>
   );
 };
