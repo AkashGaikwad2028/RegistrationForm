@@ -1,10 +1,10 @@
 import React from 'react';
-import {View, Text, StyleSheet, FlatList} from 'react-native';
+import {View, Text, StyleSheet, FlatList,Image} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 export default function CardList({Data}) {
   console.log('Datatatatatt', Data);
   const renderItem = ({item}) => {
-    console.log('iemmmmmmmmmmmmmmm1', item);
+    console.log('iemmmmmmmmmmmmmmm1', item[1].url);
     // if(item.picsdaata){
     //   // console.log("kjkkkkkj",item.picsdaata)
     // }
@@ -12,21 +12,21 @@ export default function CardList({Data}) {
       <SafeAreaView style={{flex: 1}}>
         <View style={styles.MaincardContainer}>
           <View style={styles.ImageCardContainer}>
-            {/* <Image
-        style={styles.tinyLogo}
+            <Image
+        style={{flex:1}}
         source={{
-          uri:{item.url}
+          uri:item[1].url
         }}
-      /> */}
+      />
           </View>
           <View style={styles.cardHeroConainer}>
             <View style={styles.CardDescription}>
               <Text style={styles.Text_Header}>Name:</Text>
-              {/* <Text style={styles.Text}>{item.name}</Text> */}
+              <Text style={styles.Text}>{item[0].name}</Text>
             </View>
             <View style={styles.CardDescription}>
               <Text style={styles.Text_Header}>Email:</Text>
-              {/* <Text style={styles.Text}>{item.email}</Text> */}
+              <Text style={styles.Text}>{item[0].email}</Text>
             </View>
           </View>
         </View>
@@ -37,7 +37,7 @@ export default function CardList({Data}) {
   return (
     <View>
       <FlatList
-        data={Data[0]}
+        data={Data}
         renderItem={renderItem}
         keyExtractor={item => item.id}
       />
@@ -63,11 +63,11 @@ const styles = StyleSheet.create({
   },
 
   ImageCardContainer: {
-    backgroundColor: 'yellow',
+    // backgroundColor: 'yellow',
     width: '30%',
     height: 100,
     marginHorizontal: 10,
-    borderRadius: 10,
+    borderRadius: 300,
   },
   Text: {
     fontSize: 16,
@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
   },
   Text_Header: {
     fontSize: 16,
-    color: 'black',
+    color: 'blue',
     fontWeight: 'thin',
   },
   cardHeroConainer: {
